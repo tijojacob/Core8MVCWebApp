@@ -1,0 +1,46 @@
+﻿@page
+@model Core8MVCWebAppRazor.Pages.Categories.IndexModel
+
+<div class="container">
+    <div class="row pt-4 pb-3">
+        <div class="col-6">
+            <h2 class="text-primary">
+                Category List
+            </h2>
+        </div>
+        <div class="col-6 text-end">
+            <a asp-page="/categories/create" class="btn btn-primary">
+                <i class="bi bi-plus-square-fill"></i>Create New Category
+            </a>
+        </div>
+    </div>
+</div>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <th>
+            Category Name
+        </th>
+        <th>
+            Display Order
+        </th>
+    </tr>
+
+    @foreach (var obj in Model.objCategoryList.OrderBy(o => o.DisplayOrder))
+    {
+        <tr>
+            <td>@obj.Name</td>
+            <td>
+                @obj.DisplayOrder
+                <div class="w-75 btn-group col float-end" role="group">
+                    <a asp-page="/categories/edit" asp-route-id="@obj.Id" class="btn btn-primary mx-2">
+                        <i class="bi bi-pencil-square"></i>Edit
+                    </a>
+                    <a asp-page="/categories/delete" asp-route-id="@obj.Id" class="btn btn-danger mx-2 border">
+                        <i class="bi bi-trash"></i>Delete
+                    </a>
+                </div>
+            </td>
+        </tr>
+    }
+</table>

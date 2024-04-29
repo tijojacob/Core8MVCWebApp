@@ -1,0 +1,37 @@
+﻿@page
+@model Core8MVCWebAppRazor.Pages.Categories.DeleteModel
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-primary">Delete Category</h2>
+            <hr />
+        </div>
+        <input asp-for="objCategory.Id" style="display:none" />
+        <div asp-validation-summary="All" class="text-danger">
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="objCategory.Name" class="p-0">
+                Category Name
+            </label>
+            <input asp-for="objCategory.Name" class="form-control" disabled />
+            <span asp-validation-for="objCategory.Name" class="text-danger"></span>
+        </div>
+        <div class="mb-3 row">
+            <label asp-for="objCategory.DisplayOrder" class="p-0">
+                Display Order
+            </label>
+            <input asp-for="objCategory.DisplayOrder" class="form-control" disabled />
+            <span asp-validation-for="objCategory.DisplayOrder" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <div class="col-6 col-md-3">
+                <button asp-route-id="Id" type="submit" class="btn btn-danger  form-control">Delete</button>
+            </div>
+            <div class="col-6 col-md-3">
+                <a asp-page="/categories/index" class="btn btn-secondary border form-control">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+</form>
