@@ -16,4 +16,10 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Core8MVCWebApp.DataAccess\Core8MVC.DataAccess.csproj" />
+    <ProjectReference Include="..\Core8MVCWebApp.Models\Core8MVC.Models.csproj" />
+    <ProjectReference Include="..\Core8MVCWebApp.Utility\Core8MVC.Utility.csproj" />
+  </ItemGroup>
+
 </Project>

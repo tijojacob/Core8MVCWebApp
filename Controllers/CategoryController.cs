@@ -1,8 +1,6 @@
-﻿using Core8MVCWebApp.Controllers.Data;
-using Core8MVCWebApp.Models;
-using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
+﻿using Microsoft.AspNetCore.Mvc;
+using Core8MVC.Models.Models;
+using Core8MVCWebApp.Controllers.Data;
 
 namespace Core8MVCWebApp.Controllers
 {
@@ -33,7 +31,7 @@ namespace Core8MVCWebApp.Controllers
             else if (ModelState.IsValid)
             {
                 _db.Categories.Add(obj);
-                TempData["success"] = "Data created successfully";
+                TempData["success"] = "Record created successfully";
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -45,7 +43,7 @@ namespace Core8MVCWebApp.Controllers
         {
             if (Id==null || Id==0)
             {
-                ModelState.AddModelError("", "Select a valid data");
+                ModelState.AddModelError("", "Select a valid record");
                 //return RedirectToAction("CreateCategory");
             }
             else if (Id>0)
@@ -56,7 +54,7 @@ namespace Core8MVCWebApp.Controllers
 
                 if (edit2 == null)
                 {
-                    ModelState.AddModelError("", "Data not found");
+                    ModelState.AddModelError("", "Record not found");
                 }
                 else
                 {
@@ -75,7 +73,7 @@ namespace Core8MVCWebApp.Controllers
             else if (ModelState.IsValid)
             {
                 _db.Categories.Update(obj);
-                TempData["success"] = "Data updated successfully";
+                TempData["success"] = "Record updated successfully";
                 _db.SaveChanges();
                 return RedirectToAction("Index");
             }
@@ -87,7 +85,7 @@ namespace Core8MVCWebApp.Controllers
         {
             if (Id == null || Id == 0)
             {
-                ModelState.AddModelError("", "Select a valid data");
+                ModelState.AddModelError("", "Select a valid Record");
                 //return RedirectToAction("CreateCategory");
             }
             else if (Id > 0)
@@ -98,7 +96,7 @@ namespace Core8MVCWebApp.Controllers
 
                 if (delete2 == null)
                 {
-                    ModelState.AddModelError("", "Data not found");
+                    ModelState.AddModelError("", "Record not found");
                 }
                 else
                 {
@@ -114,7 +112,7 @@ namespace Core8MVCWebApp.Controllers
             Category? delete2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
             Category? delete3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
             _db.Categories.Remove(delete2);
-            TempData["success"] = "Data deleted successfully";
+            TempData["success"] = "Record deleted successfully";
             _db.SaveChanges();
             return RedirectToAction("Index");            
         }
