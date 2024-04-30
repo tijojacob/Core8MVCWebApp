@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Core8MVCWebApp.Utility\Core8MVC.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+  </ItemGroup>
+
 </Project>

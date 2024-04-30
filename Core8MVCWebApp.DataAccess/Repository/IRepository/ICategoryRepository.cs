@@ -10,6 +10,6 @@ namespace Core8MVC.DataAccess.Repository.IRepository
     public interface ICategoryRepository : IRepository<Category>
     {
         void Update(Category category);
-        void Save();
+        //void Save();
     }
 }
