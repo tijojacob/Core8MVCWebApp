@@ -10,7 +10,7 @@
         </div>
     </div>
     <div class="card-body p-4">
-        <form method="post" class="row">
+        <form method="post" class="row" enctype="multipart/form-data">
             <div class="border p-3 mt-4">
 
                 <div asp-validation-summary="All" class="text-danger">
@@ -88,7 +88,7 @@
                     <label asp-for="Product.ImageURL" class="p-0">
 
                     </label>
-                    <input asp-for="Product.ImageURL" class="form-control" />
+                    <input type="file" class="form-control" />
                     <span asp-validation-for="Product.ImageURL" class="text-danger"></span>
                 </div>
 
