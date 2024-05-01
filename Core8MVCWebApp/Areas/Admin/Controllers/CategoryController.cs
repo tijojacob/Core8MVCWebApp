@@ -1,19 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Core8MVC.Models.Models;
 using Core8MVCWebApp.Controllers.Data;
+using Core8MVC.DataAccess.Repository.IRepository;
 
-namespace Core8MVCWebApp.Controllers
+namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
     public class CategoryController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _db= db;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList= _db.Categories.ToList();
+            List<Category> objCategoryList = _unitOfWork._categoryRepository.GetAll().ToList();
             return View(objCategoryList);
         }
         public IActionResult CreateCategory()
@@ -30,27 +31,29 @@ namespace Core8MVCWebApp.Controllers
             }
             else if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
+                _unitOfWork._categoryRepository.Add(obj);
                 TempData["success"] = "Record created successfully";
-                _db.SaveChanges();
+                _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View();
-            
+
         }
 
         public IActionResult EditCategory(int? Id)
         {
-            if (Id==null || Id==0)
+            if (Id == null || Id == 0)
             {
                 ModelState.AddModelError("", "Select a valid record");
                 //return RedirectToAction("CreateCategory");
             }
-            else if (Id>0)
+            else if (Id > 0)
             {
-                Category? edit1 = _db.Categories.Find(Id);
-                Category? edit2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
-                Category? edit3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
+                Category? edit2 = _unitOfWork._categoryRepository.Get(c => c.Id == Id);
+
+                //Category? edit1 = _db.Categories.Find(Id);
+                //Category? edit2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
+                //Category? edit3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
 
                 if (edit2 == null)
                 {
@@ -72,9 +75,9 @@ namespace Core8MVCWebApp.Controllers
             }
             else if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
+                _unitOfWork._categoryRepository.Update(obj);
                 TempData["success"] = "Record updated successfully";
-                _db.SaveChanges();
+                _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
             return View();
@@ -90,9 +93,12 @@ namespace Core8MVCWebApp.Controllers
             }
             else if (Id > 0)
             {
-                Category? delete1 = _db.Categories.Find(Id);
-                Category? delete2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
-                Category? delete3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
+                Category? delete2 = _unitOfWork._categoryRepository.Get(c => c.Id == Id);
+
+
+                //Category? delete1 = _db.Categories.Find(Id);
+                //Category? delete2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
+                //Category? delete3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
 
                 if (delete2 == null)
                 {
@@ -105,16 +111,19 @@ namespace Core8MVCWebApp.Controllers
             }
             return View();
         }
-        [HttpPost,ActionName("DeleteCategory")]
+        [HttpPost, ActionName("DeleteCategory")]
         public IActionResult DeleteCategoryPOST(int? Id)
         {
-            Category? delete1 = _db.Categories.Find(Id);
-            Category? delete2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
-            Category? delete3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
-            _db.Categories.Remove(delete2);
+            Category? delete2 = _unitOfWork._categoryRepository.Get(c => c.Id == Id);
+
+
+            //Category? delete1 = _db.Categories.Find(Id);
+            //Category? delete2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
+            //Category? delete3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
+            _unitOfWork._categoryRepository.Remove(delete2);
             TempData["success"] = "Record deleted successfully";
-            _db.SaveChanges();
-            return RedirectToAction("Index");            
+            _unitOfWork.Save();
+            return RedirectToAction("Index");
         }
 
     }
