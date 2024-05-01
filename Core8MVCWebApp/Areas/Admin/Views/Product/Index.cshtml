@@ -1,0 +1,68 @@
+﻿@model List<Core8MVC.Models.Models.Product>
+
+<div class="card shadow border-0" style=" margin-bottom: 60px !important">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Product List</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <div class="row pb-3">            
+            <div class="col-12 text-end">
+                <a asp-controller="Product" asp-action="CreateProduct" class="btn btn-primary">
+                    <i class="bi bi-file-earmark-plus-fill"></i>  Create New Product
+                </a>
+            </div>
+        </div>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>
+                    Title
+                </th>
+                <th>
+                    Description
+                </th>
+                <th>
+                    ISBN
+                </th>
+                <th>
+                    Author
+                </th>
+                <th>
+                    Category
+                </th>
+               <th style="width:200px">
+                   Action
+               </th>
+            </tr>
+
+            @foreach (var obj in Model.OrderBy(o => o.Title))
+            {
+                <tr>
+                    <td>@obj.Title</td>
+                    <td>@obj.Description</td>
+                    <td>@obj.ISBN</td>
+                    <td>@obj.Author</td>
+                    <td></td>
+                    <td>
+                        @* @obj.Price100 *@
+                        <div class="btn-group" role="group">
+                            <a asp-controller="Product" asp-action="EditProduct" asp-route-id="@obj.Id" class="btn btn-primary">
+                                <i class="bi bi-pencil-square"></i>Edit
+                            </a>
+                            <a asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@obj.Id" class="btn btn-danger mx-2 border">
+                                <i class="bi bi-trash"></i>Delete
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+ </div>
+
+
+
+

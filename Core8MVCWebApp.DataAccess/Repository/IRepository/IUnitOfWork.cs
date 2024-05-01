@@ -9,6 +9,7 @@ namespace Core8MVC.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ICategoryRepository _categoryRepository { get; }
+        IProductRepository _productRepository { get; } 
         void Save();
     }
 }
