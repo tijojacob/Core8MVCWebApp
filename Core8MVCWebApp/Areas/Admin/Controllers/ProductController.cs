@@ -19,23 +19,28 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             List<Product> objProductList = _unitOfWork._productRepository.GetAll().ToList();            
             return View(objProductList);
         }
-        public IActionResult CreateProduct()
+        public IActionResult UpsertProduct(int? Id)
         {
+            ProductVM product = new ProductVM();
             IEnumerable<SelectListItem> CategoryList = _unitOfWork._categoryRepository.GetAll()
                 .Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
             //ViewBag.CategoryList = CategoryList;
             //ViewData["CategoryList"]=CategoryList;
+            product.Categories = CategoryList;
 
-            ProductVM product = new (){ 
-                Categories= CategoryList,
-                Product = new Product()
-            };
-
+            if ( Id != null && Id>0)
+            {
+                product.Product = _unitOfWork._productRepository.Get(c => c.Id == Id);
+            }
+            else
+            {
+                product.Product = new Product();
+            }            
             return View(product);
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(ProductVM obj)
+        public IActionResult CreateProduct(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
@@ -55,46 +60,6 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
                 
             }
             return View(obj);
-
-        }
-
-        public IActionResult EditProduct(int? Id)
-        {
-            if (Id == null || Id == 0)
-            {
-                ModelState.AddModelError("", "Select a valid record");
-                //return RedirectToAction("CreateProduct");
-            }
-            else if (Id > 0)
-            {
-                Product? edit2 = _unitOfWork._productRepository.Get(c => c.Id == Id);
-
-                //Product? edit1 = _db.Categories.Find(Id);
-                //Product? edit2 = _db.Categories.FirstOrDefault(c => c.Id == Id);
-                //Product? edit3 = _db.Categories.Where(c => c.Id == Id).FirstOrDefault();
-
-                if (edit2 == null)
-                {
-                    ModelState.AddModelError("", "Record not found");
-                }
-                else
-                {
-                    return View(edit2);
-                }
-            }
-            return View();
-        }
-        [HttpPost]
-        public IActionResult EditProduct(Product obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _unitOfWork._productRepository.Update(obj);
-                TempData["success"] = "Record updated successfully";
-                _unitOfWork.Save();
-                return RedirectToAction("Index");
-            }
-            return View();
 
         }
 

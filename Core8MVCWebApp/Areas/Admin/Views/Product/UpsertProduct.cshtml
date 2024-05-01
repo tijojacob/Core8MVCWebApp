@@ -5,13 +5,14 @@
     <div class="card-header bg-secondary bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">Create Product</h2>
+                <h2 class="text-white py-2">@(Model.Product.Id==null ? "Create" : "Update") Product</h2>
             </div>
         </div>
     </div>
     <div class="card-body p-4">
         <form method="post" class="row" enctype="multipart/form-data">
             <div class="border p-3 mt-4">
+                <input asp-for="Product.Id" class="form-control" hidden/>
 
                 <div asp-validation-summary="All" class="text-danger">
                 </div>
@@ -94,7 +95,17 @@
 
                 <div class="row">
                     <div class="col-6 col-md-3">
-                        <button asp-controller="Product" asp-action="CreateProduct" type="submit" class="btn btn-primary  form-control">Create</button>
+                        @{
+                            if(Model.Product.Id == null)
+                            {
+                                <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control">Create</button>
+
+                            }
+                            else
+                            {
+                                <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control">Update</button>
+                            }
+                        }
                     </div>
                     <div class="col-6 col-md-3">
                         <a asp-controller="Product" asp-action="Index" class="btn btn-secondary border form-control">Back to List</a>

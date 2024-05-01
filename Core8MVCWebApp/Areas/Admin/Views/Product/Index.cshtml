@@ -11,7 +11,7 @@
     <div class="card-body p-4">
         <div class="row pb-3">            
             <div class="col-12 text-end">
-                <a asp-controller="Product" asp-action="CreateProduct" class="btn btn-primary">
+                <a asp-controller="Product" asp-action="UpsertProduct" class="btn btn-primary">
                     <i class="bi bi-file-earmark-plus-fill"></i>  Create New Product
                 </a>
             </div>
@@ -49,7 +49,7 @@
                     <td>
                         @* @obj.Price100 *@
                         <div class="btn-group" role="group">
-                            <a asp-controller="Product" asp-action="EditProduct" asp-route-id="@obj.Id" class="btn btn-primary">
+                            <a asp-controller="Product" asp-action="UpsertProduct" asp-route-id="@obj.Id" class="btn btn-primary">
                                 <i class="bi bi-pencil-square"></i>Edit
                             </a>
                             <a asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@obj.Id" class="btn btn-danger mx-2 border">
