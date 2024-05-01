@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Core8MVC.Models.Models;
+using Core8MVC.Models.ViewModels;
 using Core8MVCWebApp.Controllers.Data;
 using Core8MVC.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
@@ -14,25 +16,45 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork._productRepository.GetAll().ToList();
+            List<Product> objProductList = _unitOfWork._productRepository.GetAll().ToList();            
             return View(objProductList);
         }
         public IActionResult CreateProduct()
         {
-            return View();
+            IEnumerable<SelectListItem> CategoryList = _unitOfWork._categoryRepository.GetAll()
+                .Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+            //ViewBag.CategoryList = CategoryList;
+            //ViewData["CategoryList"]=CategoryList;
+
+            ProductVM product = new (){ 
+                Categories= CategoryList,
+                Product = new Product()
+            };
+
+            return View(product);
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(Product obj)
+        public IActionResult CreateProduct(ProductVM obj)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork._productRepository.Add(obj);
+                _unitOfWork._productRepository.Add(obj.Product);
                 TempData["success"] = "Record created successfully";
                 _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
-            return View();
+            else
+            {
+                IEnumerable<SelectListItem> CategoryList = _unitOfWork._categoryRepository.GetAll()
+                .Select(u => new SelectListItem { Text = u.Name, Value = u.Id.ToString() });
+                //ViewBag.CategoryList = CategoryList;
+                //ViewData["CategoryList"]=CategoryList;
+
+                obj.Categories = CategoryList;
+                
+            }
+            return View(obj);
 
         }
 

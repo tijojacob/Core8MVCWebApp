@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace Core8MVC.Models.Models
 {
@@ -47,9 +48,10 @@ namespace Core8MVC.Models.Models
         [DisplayName("List Price for 100+")]
         [Range(1, 1000, ErrorMessage = "Price should be within 1 - 1000")]
         public double Price100 { get; set; }
-
         public int CategoryId { get; set; }
         [ForeignKey(nameof(CategoryId))]
+        [ValidateNever]
         public Category Category { get; set; }
+        public string ImageURL { get; set; }
     }
 }

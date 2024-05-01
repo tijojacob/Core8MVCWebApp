@@ -1,4 +1,4 @@
-﻿@model Core8MVC.Models.Models.Product
+﻿@model Core8MVC.Models.ViewModels.ProductVM
 
 
 <div class="card shadow border-0" style="margin-bottom: 60px !important">
@@ -17,60 +17,79 @@
                 </div>
 
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Title" class="p-0">
+                    <label asp-for="Product.Title" class="p-0">
 
                     </label>
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
+                    <input asp-for="Product.Title" class="form-control" />
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Description" class="p-0">
+                    <label asp-for="Product.Description" class="p-0">
                         Description
                     </label>
-                    <textarea asp-for="Description" class="form-control"></textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="ISBN" class="p-0">
+                    <label asp-for="Product.ISBN" class="p-0">
 
                     </label>
-                    <input asp-for="ISBN" class="form-control" />
-                    <span asp-validation-for="ISBN" class="text-danger"></span>
+                    <input asp-for="Product.ISBN" class="form-control" />
+                    <span asp-validation-for="Product.ISBN" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Author" class="p-0">
+                    <label asp-for="Product.Author" class="p-0">
 
                     </label>
-                    <input asp-for="Author" class="form-control" />
-                    <span asp-validation-for="Author" class="text-danger"></span>
+                    <input asp-for="Product.Author" class="form-control" />
+                    <span asp-validation-for="Product.Author" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="ListPrice" class="p-0">
+                    <label asp-for="Product.ListPrice" class="p-0">
 
                     </label>
-                    <input asp-for="ListPrice" class="form-control" />
-                    <span asp-validation-for="ListPrice" class="text-danger"></span>
+                    <input asp-for="Product.ListPrice" class="form-control" />
+                    <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Price" class="p-0">
+                    <label asp-for="Product.Price" class="p-0">
 
                     </label>
-                    <input asp-for="Price" class="form-control" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Price50" class="p-0">
+                    <label asp-for="Product.Price50" class="p-0">
 
                     </label>
-                    <input asp-for="Price50" class="form-control" />
-                    <span asp-validation-for="Price50" class="text-danger"></span>
+                    <input asp-for="Product.Price50" class="form-control" />
+                    <span asp-validation-for="Product.Price50" class="text-danger"></span>
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
-                    <label asp-for="Price100" class="p-0">
+                    <label asp-for="Product.Price100" class="p-0">
 
                     </label>
-                    <input asp-for="Price100" class="form-control" />
-                    <span asp-validation-for="Price100" class="text-danger"></span>
+                    <input asp-for="Product.Price100" class="form-control" />
+                    <span asp-validation-for="Product.Price100" class="text-danger"></span>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="Product.CategoryId" class="p-0">
+
+                    </label>
+                    <select asp-for="Product.CategoryId" asp-items="@Model.Categories" class="form-select border">
+                    @* <select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-select border"> *@
+                    @* <select asp-for="CategoryId" asp-items=@(ViewData["CategoryList"] as IEnumerable<SelectedListItems>) class="form-select border"> *@
+                        <option disabled selected>Select Category</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="Product.ImageURL" class="p-0">
+
+                    </label>
+                    <input asp-for="Product.ImageURL" class="form-control" />
+                    <span asp-validation-for="Product.ImageURL" class="text-danger"></span>
                 </div>
 
                 <div class="row">
