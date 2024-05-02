@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css" />
     <link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/richtexteditor/rte_theme_default.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.5/css/dataTables.dataTables.min.css" />
+
 </head>
 <body>
     <header>
@@ -67,6 +69,9 @@
     <script type="text/javascript" src="~/richtexteditor/rte.js"></script>
     <script type="text/javascript" src='~/richtexteditor/plugins/all_plugins.js'></script>
     <script>var editor1 = new RichTextEditor("#div_editor1");</script>
+    <script src="https://cdn.datatables.net/2.0.5/js/dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

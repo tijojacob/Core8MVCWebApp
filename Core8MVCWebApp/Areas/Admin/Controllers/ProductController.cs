@@ -4,6 +4,7 @@ using Core8MVC.Models.ViewModels;
 using Core8MVCWebApp.Controllers.Data;
 using Core8MVC.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
@@ -18,7 +19,7 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork._productRepository.GetAll().ToList();            
+            List<Product> objProductList = _unitOfWork._productRepository.GetAll(includeProperties : "Category").ToList();
             return View(objProductList);
         }
         public IActionResult UpsertProduct(int? Id)
@@ -32,7 +33,7 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
 
             if ( Id != null && Id>0)
             {
-                product.Product = _unitOfWork._productRepository.Get(c => c.Id == Id);
+                product.Product = _unitOfWork._productRepository.Get(c => c.Id == Id, includeProperties: "Category");
             }
             else
             {
@@ -77,13 +78,15 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
                 if(obj.Product.Id==0)
                 {
                     _unitOfWork._productRepository.Add(obj.Product);
+                    TempData["success"] = "Record created successfully";
                 }
                 else
                 {
                     _unitOfWork._productRepository.Update(obj.Product);
+                    TempData["success"] = "Record updated successfully";
                 }
                 
-                TempData["success"] = "Record created successfully";
+                
                 _unitOfWork.Save();
                 return RedirectToAction("Index");
             }
@@ -142,6 +145,38 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             _unitOfWork.Save();
             return RedirectToAction("Index");
         }
+
+        #region API
+        [HttpGet]
+        public IActionResult GetAllProducts()
+        {
+            List<Product> objProductList = _unitOfWork._productRepository.GetAll(includeProperties: "Category").ToList();
+            return Json(new { data = objProductList });
+        }
+
+        [HttpDelete]
+        public IActionResult Delete(int? Id)
+        {
+            Product productDelete = _unitOfWork._productRepository.Get(c => c.Id == Id);
+            if (productDelete == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+
+            string wwwRoot = _webHostEnvironment.WebRootPath;
+            var oldImagePath = Path.Combine(wwwRoot, productDelete.ImageURL.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImagePath))
+            {
+                System.IO.File.Delete(oldImagePath);
+            }
+
+            _unitOfWork._productRepository.Remove(productDelete);
+            TempData["success"] = "Record deleted successfully";
+            _unitOfWork.Save();
+            
+            return Json(new { success = true, message = "Record deleted successfully" });            
+        }
+        #endregion
 
     }
 }
