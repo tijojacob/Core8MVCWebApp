@@ -52,6 +52,7 @@ namespace Core8MVC.Models.Models
         [ForeignKey(nameof(CategoryId))]
         [ValidateNever]
         public Category Category { get; set; }
+        [ValidateNever]
         public string ImageURL { get; set; }
     }
 }

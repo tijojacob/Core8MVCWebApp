@@ -1,22 +1,20 @@
 ﻿@model Core8MVC.Models.ViewModels.ProductVM
 
-
 <div class="card shadow border-0" style="margin-bottom: 60px !important">
     <div class="card-header bg-secondary bg-gradient ml-0 py-3">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-white py-2">@(Model.Product.Id==null ? "Create" : "Update") Product</h2>
+                <h2 class="text-white py-2">@((Model.Product.Id == null || Model.Product.Id == 0) ? "Create" : "Update") Product</h2>
             </div>
         </div>
     </div>
     <div class="card-body p-4">
-        <form method="post" class="row" enctype="multipart/form-data">
+        <form method="post" class="row" enctype="multipart/form-data">                                                    
             <div class="border p-3 mt-4">
                 <input asp-for="Product.Id" class="form-control" hidden/>
-
+                <input asp-for="Product.ImageURL" class="form-control" hidden />
                 <div asp-validation-summary="All" class="text-danger">
                 </div>
-
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <label asp-for="Product.Title" class="p-0">
 
@@ -28,9 +26,10 @@
                     <label asp-for="Product.Description" class="p-0">
                         Description
                     </label>
-                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                    <input id="div_editor1" asp-for="Product.Description" class="form-control"></input>
+                    @* <input asp-for="Product.Description" class="form-control"></input> *@
                     <span asp-validation-for="Product.Description" class="text-danger"></span>
-                </div>
+                </div>                                 
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <label asp-for="Product.ISBN" class="p-0">
 
@@ -87,23 +86,29 @@
 
                 <div style="margin-top: 10px;margin-bottom: 10px;">
                     <label asp-for="Product.ImageURL" class="p-0">
-
                     </label>
-                    <input type="file" class="form-control" />
+                    <input type="file" name="file" class="form-control" />
                     <span asp-validation-for="Product.ImageURL" class="text-danger"></span>
                 </div>
-
+                @{
+                    if (!string.IsNullOrEmpty(Model.Product.ImageURL))
+                    {
+                        <div style="margin-top: 10px;margin-bottom: 10px; max-width:500px">
+                            <img src="@Url.Content("~/"+@Model.Product.ImageURL)" style="border-radius:5px; border: 1px solid" />
+                        </div>
+                    }
+                }                
                 <div class="row">
                     <div class="col-6 col-md-3">
                         @{
-                            if(Model.Product.Id == null)
+                            if (Model.Product.Id == null || Model.Product.Id==0)
                             {
-                                <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control">Create</button>
+                                    <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control" >Create</button>
 
                             }
                             else
                             {
-                                <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control">Update</button>
+                                    <button asp-controller="Product" asp-action="UpsertProduct" type="submit" class="btn btn-primary  form-control">Update</button>
                             }
                         }
                     </div>
@@ -116,7 +121,6 @@
         </form>
     </div>
 </div>
-
 
 @* @section Scripts
 {

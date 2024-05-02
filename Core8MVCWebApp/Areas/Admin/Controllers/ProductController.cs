@@ -10,9 +10,11 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public ProductController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public ProductController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -40,11 +42,47 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateProduct(ProductVM obj, IFormFile? file)
+        public IActionResult UpsertProduct(ProductVM obj, IFormFile? file)
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork._productRepository.Add(obj.Product);
+                string wwwRoot = _webHostEnvironment.WebRootPath;
+
+                if (file!=null)
+                {
+                    if(!string.IsNullOrEmpty(obj.Product.ImageURL))
+                    {
+                        var oldImagePath = Path.Combine(wwwRoot, obj.Product.ImageURL.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);                            
+                        }
+                        obj.Product.ImageURL = string.Empty;
+                    }
+
+                    if(string.IsNullOrEmpty(obj.Product.ImageURL))
+                    {
+                        string fileName = Guid.NewGuid().ToString() + Path.GetFileNameWithoutExtension(file.FileName) + Path.GetExtension(file.FileName);
+                        string filePath = Path.Combine(wwwRoot, @"images\product");
+
+                        using (var fileStream = new FileStream(Path.Combine(filePath, fileName), FileMode.Create))
+                        {
+                            file.CopyTo(fileStream);
+                        }
+                        obj.Product.ImageURL = @"images\product\" + fileName;
+
+                    }                                        
+                }
+
+                if(obj.Product.Id==0)
+                {
+                    _unitOfWork._productRepository.Add(obj.Product);
+                }
+                else
+                {
+                    _unitOfWork._productRepository.Update(obj.Product);
+                }
+                
                 TempData["success"] = "Record created successfully";
                 _unitOfWork.Save();
                 return RedirectToAction("Index");

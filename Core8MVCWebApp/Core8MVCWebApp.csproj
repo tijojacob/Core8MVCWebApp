@@ -29,4 +29,8 @@
     <ProjectReference Include="..\Core8MVCWebApp.Utility\Core8MVC.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\product\" />
+  </ItemGroup>
+
 </Project>
