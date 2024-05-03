@@ -5,10 +5,13 @@ using Core8MVCWebApp.Controllers.Data;
 using Core8MVC.DataAccess.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.Blazor;
+using Core8MVC.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Roles = StaticUtilities.Role_Admin)]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
