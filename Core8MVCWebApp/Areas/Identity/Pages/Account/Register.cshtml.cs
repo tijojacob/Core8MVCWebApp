@@ -106,6 +106,13 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             [Required]
             public string? Role { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
+            [Required]
+            public string Name { get; set; }
+            public string? PhoneNumber { get; set; }
+            public string? StreetAddress { get; set; }
+            public string? City { get; set; }
+            public string? State { get; set; }
+            public string? PostalCode { get; set; }
         }
 
 
@@ -139,6 +146,12 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
+                user.StreetAddress = Input.StreetAddress;
+                user.City = Input.City;
+                user.State=Input.State; ;
+                user.PhoneNumber=Input.PhoneNumber;
+                user.Name = Input.Name;
+                user.PostalCode=Input.PostalCode;
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
