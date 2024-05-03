@@ -5,6 +5,7 @@ using Core8MVC.DataAccess.Repository.IRepository;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
