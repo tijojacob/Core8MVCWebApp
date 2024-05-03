@@ -14,6 +14,7 @@ namespace Core8MVCWebApp.Controllers.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Company> Companies { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -111,6 +112,12 @@ namespace Core8MVCWebApp.Controllers.Data
                     CategoryId = 3,
                     ImageURL = "",
                 }
+                );
+
+            modelBuilder.Entity<Company>().HasData(
+                new Company { Id = 1, Name = "Tech Solution", StreetAddress = "Tech Street" , City = "Tech City", State = "Tech State", PostalCode= "Tech Postal Code", PhoneNumber ="123456789"},
+                new Company { Id = 2, Name = "Vivid Books", StreetAddress = "Vivid Street", City = "Vivid City", State = "Vivid State", PostalCode = "Vivid Postal Code", PhoneNumber ="67890"},
+                new Company { Id = 3, Name = "Readers Club", StreetAddress = "Readers Street", City = "Readers City", State = "Readers State", PostalCode = "Readers Postal Code", PhoneNumber = "321654987" }
                 );
         }
     }
