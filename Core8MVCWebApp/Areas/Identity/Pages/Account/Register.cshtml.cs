@@ -10,6 +10,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Core8MVC.DataAccess.Repository.IRepository;
 using Core8MVC.Models.Models;
 using Core8MVC.Utility;
 using Microsoft.AspNetCore.Authentication;
@@ -17,6 +18,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
@@ -33,6 +35,7 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<IdentityUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUnitOfWork _unitOfWork;
 
         public RegisterModel(
             UserManager<IdentityUser> userManager,
@@ -40,7 +43,8 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUnitOfWork unitOfWork)
         {
             _userManager = userManager;
             _roleManager = roleManager;
@@ -49,6 +53,7 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _unitOfWork = unitOfWork;
         }
 
         /// <summary>
@@ -104,7 +109,7 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
             [Required]
-            public string? Role { get; set; }
+            public string Role { get; set; }
             public IEnumerable<SelectListItem> RoleList { get; set; }
             [Required]
             public string Name { get; set; }
@@ -113,6 +118,10 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
             public string? City { get; set; }
             public string? State { get; set; }
             public string? PostalCode { get; set; }
+            [ValidateNever]
+            public int? CompanyId { get; set; }
+            [ValidateNever]
+            public IEnumerable<SelectListItem> CompanyList { get; set; }
         }
 
 
@@ -132,7 +141,13 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
                 {
                     Text = u.Name,
                     Value = u.Name
-                })
+                }),
+
+                CompanyList = _unitOfWork._companyRepository.GetAll().Select(u => new SelectListItem
+                {
+                    Text = u.Name,
+                    Value = u.Id.ToString()
+                }),
             };
 
             ReturnUrl = returnUrl;
@@ -152,6 +167,11 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
                 user.PhoneNumber=Input.PhoneNumber;
                 user.Name = Input.Name;
                 user.PostalCode=Input.PostalCode;
+
+                if(Input.Role == StaticUtilities.Role_Company)
+                {
+                    user.CompanyId = Input.CompanyId;
+                }
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
