@@ -14,12 +14,15 @@ namespace Core8MVC.DataAccess.Repository
 
         public IProductRepository _productRepository { get; private set; }
 
+        public ICompanyRepository _companyRepository { get; private set; }
+
         private ApplicationDbContext _db;
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
             _categoryRepository = new CategoryRepository(_db);
             _productRepository = new ProductRepository(_db);
+            _companyRepository = new CompanyRepository(_db);
         }
         public void Save()
         {

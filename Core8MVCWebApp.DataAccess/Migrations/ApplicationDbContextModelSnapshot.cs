@@ -63,6 +63,76 @@ namespace Core8MVC.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Core8MVC.Models.Models.Company", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PhoneNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PostalCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("State")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("StreetAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Companies");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            City = "Tech City",
+                            Name = "Tech Solution",
+                            PhoneNumber = "123456789",
+                            PostalCode = "Tech Postal Code",
+                            State = "Tech State",
+                            StreetAddress = "Tech Street"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            City = "Vivid City",
+                            Name = "Vivid Books",
+                            PhoneNumber = "67890",
+                            PostalCode = "Vivid Postal Code",
+                            State = "Vivid State",
+                            StreetAddress = "Vivid Street"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            City = "Readers City",
+                            Name = "Readers Club",
+                            PhoneNumber = "321654987",
+                            PostalCode = "Readers Postal Code",
+                            State = "Readers State",
+                            StreetAddress = "Readers Street"
+                        });
+                });
+
             modelBuilder.Entity("Core8MVC.Models.Models.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -354,12 +424,10 @@ namespace Core8MVC.DataAccess.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -396,12 +464,10 @@ namespace Core8MVC.DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");

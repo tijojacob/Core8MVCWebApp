@@ -1,0 +1,89 @@
+﻿@model Core8MVC.Models.Models.Company
+
+<div class="card shadow border-0" style="margin-bottom: 60px !important">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">@((Model.Id == null || Model.Id == 0) ? "Create" : "Update") Company</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row" enctype="multipart/form-data">                                                    
+            <div class="border p-3 mt-4">
+                <input asp-for="Id" class="form-control" hidden/>
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="Name" class="p-0">
+
+                    </label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="StreetAddress" class="p-0">                        
+                    </label>
+                    @* <input id="div_editor1" asp-for="StreetAddress" class="form-control"></input> *@
+                    <input asp-for="StreetAddress" class="form-control"/>
+                    <span asp-validation-for="StreetAddress" class="text-danger"></span>
+                </div>                                 
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="City" class="p-0">
+
+                    </label>
+                    <input asp-for="City" class="form-control" />
+                    <span asp-validation-for="City" class="text-danger"></span>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="State" class="p-0">
+
+                    </label>
+                    <input asp-for="State" class="form-control" />
+                    <span asp-validation-for="State" class="text-danger"></span>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="PostalCode" class="p-0">
+
+                    </label>
+                    <input asp-for="PostalCode" class="form-control" />
+                    <span asp-validation-for="PostalCode" class="text-danger"></span>
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="PhoneNumber" class="p-0">
+
+                    </label>
+                    <input asp-for="PhoneNumber" class="form-control" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+                                           
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        @{
+                            if (Model.Id == null || Model.Id==0)
+                            {
+                                    <button asp-controller="Company" asp-action="UpsertCompany" type="submit" class="btn btn-primary  form-control" >Create</button>
+
+                            }
+                            else
+                            {
+                                <button asp-controller="Company" asp-action="UpsertCompany" type="submit" class="btn btn-primary  form-control">Update</button>
+                            }
+                        }
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="Company" asp-action="Index" class="btn btn-secondary border form-control">Back to List</a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+@* @section Scripts
+{
+    @{
+    <partial name="_ValidationScriptsPartial.cshtml" />
+    }
+} *@
