@@ -2,9 +2,13 @@
 using Core8MVC.Models.Models;
 using Core8MVCWebApp.Controllers.Data;
 using Core8MVC.DataAccess.Repository.IRepository;
+using Microsoft.AspNetCore.Authorization;
+using Core8MVC.Utility;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
+    [Area("Admin")]
+    [Authorize(Roles =StaticUtilities.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
