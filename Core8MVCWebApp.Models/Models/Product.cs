@@ -53,6 +53,6 @@ namespace Core8MVC.Models.Models
         [ValidateNever]
         public Category Category { get; set; }
         [ValidateNever]
-        public string ImageURL { get; set; }
+        public string? ImageURL { get; set; }
     }
 }
