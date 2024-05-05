@@ -11,6 +11,8 @@ namespace Core8MVC.DataAccess.Repository.IRepository
         ICategoryRepository _categoryRepository { get; }
         IProductRepository _productRepository { get; } 
         ICompanyRepository _companyRepository { get; }
+        IShoppingCartRepository _shoppingCartRepository { get; }
+        IApplicationUserRepository _applicationUserRepository { get; }
         void Save();
     }
 }

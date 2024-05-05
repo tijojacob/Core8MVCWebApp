@@ -17,6 +17,7 @@ namespace Core8MVC.DataAccess.Repository
 
         public ICompanyRepository _companyRepository { get; private set; }
         public IShoppingCartRepository _shoppingCartRepository { get; private set; }
+        public IApplicationUserRepository _applicationUserRepository { get; private set; }
 
         private ApplicationDbContext _db;
         public UnitOfWork(ApplicationDbContext db)
@@ -26,6 +27,7 @@ namespace Core8MVC.DataAccess.Repository
             _productRepository = new ProductRepository(_db);
             _companyRepository = new CompanyRepository(_db);
             _shoppingCartRepository = new ShoppingCartRepository(_db);
+            _applicationUserRepository = new ApplicationUserRepository(_db);
         }
         public void Save()
         {
