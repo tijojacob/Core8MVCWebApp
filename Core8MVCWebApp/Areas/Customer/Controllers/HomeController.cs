@@ -26,11 +26,16 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
 
         public IActionResult Details(int productId)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.ProductId == productId && u.ApplicationUserId == userId);
             ShoppingCart objCart = new()
             {
+                Id = cartFrmDb != null ? cartFrmDb.Id : 0,
                 Product = _unitOfWork._productRepository.Get(u => u.Id == productId, includeProperties: "Category"),
                 Count = 1,
-                ProductId = productId
+                ProductId = productId,
+                ApplicationUserId = userId
             };
             return View(objCart);
         }
@@ -54,6 +59,9 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                 _unitOfWork._shoppingCartRepository.Add(cart);
             }        
             _unitOfWork.Save();
+
+            cart.Product = _unitOfWork._productRepository.Get(u => u.Id == cart.ProductId, includeProperties: "Category");
+
             TempData["success"] = "Cart updated successfully";
             return View(cart);
         }

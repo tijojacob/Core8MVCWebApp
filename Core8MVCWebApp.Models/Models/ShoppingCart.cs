@@ -23,5 +23,8 @@ namespace Core8MVC.Models.Models
         [ForeignKey(nameof(ApplicationUserId))]
         [ValidateNever]
         public ApplicationUser ApplicationUser { get; set; }
+        [NotMapped]
+        [ValidateNever]
+        public double ItemPrice { get; set; }
     }
 }
