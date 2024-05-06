@@ -8,7 +8,7 @@ using Core8MVC.Utility;
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles =StaticUtilities.Role_Admin)]
+    [Authorize(Roles = StaticUtilities.Role_Admin)]
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

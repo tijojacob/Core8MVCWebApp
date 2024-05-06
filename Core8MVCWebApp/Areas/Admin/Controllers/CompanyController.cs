@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace Core8MVCWebApp.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize(Roles = StaticUtilities.Role_Admin)]
+    [Authorize(Roles = StaticUtilities.Role_Admin)]
     public class CompanyController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
