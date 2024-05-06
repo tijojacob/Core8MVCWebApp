@@ -13,6 +13,8 @@ namespace Core8MVC.DataAccess.Repository.IRepository
         ICompanyRepository _companyRepository { get; }
         IShoppingCartRepository _shoppingCartRepository { get; }
         IApplicationUserRepository _applicationUserRepository { get; }
+        IOrderHeaderRepository _orderHeaderRepository { get; }
+        IOrderDetailRepository _orderDetailRepository { get; }
         void Save();
     }
 }
