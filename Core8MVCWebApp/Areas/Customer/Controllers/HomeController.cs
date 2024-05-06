@@ -1,7 +1,9 @@
 using Core8MVC.DataAccess.Repository.IRepository;
 using Core8MVC.Models.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace Core8MVCWebApp.Areas.Customer.Controllers
 {
@@ -24,8 +26,36 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
 
         public IActionResult Details(int productId)
         {
-            Product objProduct = _unitOfWork._productRepository.Get(u=>u.Id== productId, includeProperties: "Category");
-            return View(objProduct);
+            ShoppingCart objCart = new()
+            {
+                Product = _unitOfWork._productRepository.Get(u => u.Id == productId, includeProperties: "Category"),
+                Count = 1,
+                ProductId = productId
+            };
+            return View(objCart);
+        }
+        [HttpPost]
+        [Authorize]
+        public IActionResult Details(ShoppingCart cart)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u=>u.ProductId==cart.ProductId && u.ApplicationUserId== userId);
+
+            if(cartFrmDb!=null)
+            {
+                cartFrmDb.Count += cart.Count;
+                _unitOfWork._shoppingCartRepository.Update(cartFrmDb);
+            }
+            else
+            {
+                cart.ApplicationUserId = userId;
+                _unitOfWork._shoppingCartRepository.Add(cart);
+            }        
+            _unitOfWork.Save();
+            TempData["success"] = "Cart updated successfully";
+            return View(cart);
         }
 
         public IActionResult Privacy()

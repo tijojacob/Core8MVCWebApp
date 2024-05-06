@@ -32,7 +32,7 @@
                             <a class="nav-link" asp-area="Customer" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         @{
-                            // if (User.IsInRole(StaticUtilities.Role_Admin))
+                            if (User.IsInRole(StaticUtilities.Role_Admin))
                             {
                                 <li class="nav-item dropdown">
                                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

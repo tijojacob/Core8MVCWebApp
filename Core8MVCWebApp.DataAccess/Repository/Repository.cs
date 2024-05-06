@@ -24,9 +24,17 @@ namespace Core8MVC.DataAccess.Repository
             dbSet.Add(item);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet.Where(filter);
+            IQueryable<T> query;
+            if(tracked)
+            {
+                query = dbSet.Where(filter);
+            }
+            else
+            {
+                query = dbSet.Where(filter).AsNoTracking();
+            }                
             if (!string.IsNullOrEmpty(includeProperties))
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
