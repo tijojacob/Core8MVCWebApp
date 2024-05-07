@@ -114,7 +114,14 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
             ShoppingCartVM.OrderHeader.OrderDate = System.DateTime.Now;
 			ShoppingCartVM.OrderHeader.ApplicationUserId = userId;
 			ApplicationUser user= _unitOfWork._applicationUserRepository.Get(u => u.Id == userId);
-			
+
+            foreach (var cart in ShoppingCartVM.ShoppingCartList)
+            {
+                cart.ItemPrice = GetPriceBasedOnQuantity(cart);
+                ShoppingCartVM.OrderHeader.OrderTotal += (cart.ItemPrice * cart.Count);
+            }
+
+
             if (user.CompanyId.GetValueOrDefault(0)==0)
             {
                 //its a regular cust account
@@ -137,7 +144,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                 {
                     ProductId = cart.ProductId,
                     OrderHeaderId = ShoppingCartVM.OrderHeader.Id,
-                    Price = GetPriceBasedOnQuantity(cart), // cart.ItemPrice,
+                    Price = cart.ItemPrice,
                     Count = cart.Count,
 
                 };
@@ -164,7 +171,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                     {
                         PriceData = new SessionLineItemPriceDataOptions()
                         {
-                            UnitAmount = (long)(GetPriceBasedOnQuantity(item) * 100),// $20.50=2050
+                            UnitAmount = (long)(item.ItemPrice * 100),// $20.50=2050
                             Currency = "usd",
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
@@ -177,6 +184,22 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                 }
                 var service = new Stripe.Checkout.SessionService();
                 Session session = service.Create(options);
+                //SessionCustomerDetails CustomerDetails = new SessionCustomerDetails
+                //{
+                //    Name = user.Name,
+                //    Email = user.Email,
+                //    Phone = user.PhoneNumber,
+                //    Address = new Stripe.Address
+                //    {
+                //        Line1 = user.StreetAddress,
+                //        Line2 = user.StreetAddress,
+                //        City = user.City,
+                //        State = user.State,
+                //        Country = user.City,
+                //        PostalCode = user.PostalCode,
+                //    }
+                //};
+                //session.CustomerDetails = CustomerDetails;
                 _unitOfWork._orderHeaderRepository.UpdateStipePaymentId(ShoppingCartVM.OrderHeader.Id, session.Id, session.PaymentIntentId);
                 _unitOfWork.Save();
                 Response.Headers.Add("Location", session.Url);
