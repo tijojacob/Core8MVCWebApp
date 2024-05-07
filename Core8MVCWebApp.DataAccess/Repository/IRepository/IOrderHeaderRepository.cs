@@ -11,5 +11,8 @@ namespace Core8MVC.DataAccess.Repository.IRepository
     {
         void Update(OrderHeader orderHeader);
         //void Save();
+        void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
+        void UpdateStipePaymentId(int id, string sessionId, string paymentIntentId);
+
     }
 }
