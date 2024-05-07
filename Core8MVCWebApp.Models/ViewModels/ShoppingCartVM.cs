@@ -13,7 +13,6 @@ namespace Core8MVC.Models.ViewModels
     {
         [ValidateNever]
         public IEnumerable<ShoppingCart> ShoppingCartList { get; set; }
-        [ValidateNever]
-        public double OrderTotal { get; set; }
+        public OrderHeader OrderHeader { get; set; }        
     }
 }
