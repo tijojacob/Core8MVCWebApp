@@ -1,18 +1,35 @@
 ﻿
 var dataTable;
 $(document).ready(function () {
-    loadDataTable();
+    let url = window.location.search;
+    let status = "";
+    if (url.includes("pending")) {
+        status = "pending";
+    }
+    else if (url.includes("inprocess")) {
+        status = "inprocess";
+    }
+    else if (url.includes("completed")) {
+        status = "completed";
+    }
+    else if (url.includes("approved")) {
+        status = "approved";
+    }
+    else if (url.includes("all")) {
+        status = "all";
+    }
+    loadDataTable(status);
 })
 
-function loadDataTable()
+function loadDataTable(status)
 {
     dataTable = $('#myOrderTable').DataTable({
-        "ajax": { url: '/admin/order/GetAllOrders'},
+        "ajax": { url: '/admin/order/GetAllOrders?status=' + status },
         "columns": [
-            { data: 'id', "width" : "12.5%" },
+            { data: 'id', "width" : "10%" },
             { data: 'name', "width": "20%" },
-            { data: 'phoneNumber', "width": "10%" },
-            { data: 'applicationUser.email', "width": "12.5%" },
+            { data: 'phoneNumber', "width": "15%" },
+            { data: 'applicationUser.email', "width": "25%" },
             { data: 'orderStatus', "width": "10%" },
             { data: 'orderTotal', "width": "10%" },
             {
@@ -23,7 +40,7 @@ function loadDataTable()
                                 <i class="bi bi-pencil-square"></i>
                             </a>                            
                         </div>`
-                }, "width": "20%"
+                }, "width": "10%"
             }
         ]
     });
