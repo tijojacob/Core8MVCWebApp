@@ -1,4 +1,17 @@
 ﻿@model Core8MVC.Models.ViewModels.ShoppingCartVM
+
+
+@{
+    var disabled = "";
+    if (@Model.OrderHeader.OrderTotal<=0)
+    {
+        disabled = "disabled";
+    }
+
+
+}
+
+
 <form method="post">
     <br />
     <div class="card shadow border-0">
@@ -72,7 +85,7 @@
                 </div>
                 <div class="row">
                     <div class="col-md-2 offset-md-5">
-                        <a asp-action="Summary" asp-controller="Cart" asp-area="Customer" class="btn btn-primary border-0 bg-gradient w-100 py-2" disabled="@Model.OrderHeader<=0">Summary</a>
+                        <a asp-action="Summary" asp-controller="Cart" asp-area="Customer" class="btn btn-primary border-0 bg-gradient w-100 py-2" style="@disabled">Summary</a>
                     </div>
                 </div>
             </div>

@@ -3,10 +3,9 @@ using Core8MVC.Models.Models;
 using Core8MVC.Models.ViewModels;
 using Core8MVC.Utility;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
-using System.Diagnostics;
+using Stripe.Checkout;
 using System.Security.Claims;
 
 namespace Core8MVCWebApp.Areas.Admin.Controllers
@@ -75,6 +74,70 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             };
             return View(orderVM);
         }
+
+        [HttpPost]
+        [Authorize]
+        [ActionName("Details")]
+        public IActionResult Details_Pay_Now()
+        {
+            orderVM.orderHeader = _unitOfWork._orderHeaderRepository.Get(u => u.Id == orderVM.orderHeader.Id, includeProperties: "ApplicationUser");
+            orderVM.orderDetails = _unitOfWork._orderDetailRepository.GetAll(u => u.OrderHeaderId == orderVM.orderHeader.Id, includeProperties: "Product");
+
+            var domain = "https://localhost:7276/";//System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+
+            var options = new Stripe.Checkout.SessionCreateOptions
+            {
+                SuccessUrl = domain + $"admin/order/PaymentConfirmation?orderHeaderId={orderVM.orderHeader.Id}",
+                CancelUrl = domain + $"admin/order/details?orderId={orderVM.orderHeader.Id}",
+                LineItems = new List<Stripe.Checkout.SessionLineItemOptions>(),
+                Mode = "payment",
+            };
+
+            foreach (var item in orderVM.orderDetails)
+            {
+                var sessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions()
+                    {
+                        UnitAmount = (long)(item.Price * 100),// $20.50=2050
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.Product.Title
+                        }
+                    },
+                    Quantity = item.Count,
+                };
+                options.LineItems.Add(sessionLineItem);
+            }
+            var service = new Stripe.Checkout.SessionService();
+            Session session = service.Create(options);
+            _unitOfWork._orderHeaderRepository.UpdateStipePaymentId(orderVM.orderHeader.Id, session.Id, session.PaymentIntentId);
+            _unitOfWork.Save();
+            Response.Headers.Add("Location", session.Url);
+            return new StatusCodeResult(303);
+        }
+
+        public IActionResult PaymentConfirmation(int orderHeaderId)
+        {
+            OrderHeader orderHeader = _unitOfWork._orderHeaderRepository.Get(u => u.Id == orderHeaderId, includeProperties: "ApplicationUser");
+            if (orderHeader.PaymentStatus == StaticUtilities.PaymentStatusDelayedPayment)
+            {   //this is a normal customer
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.SessionId);
+
+                if (session.PaymentStatus.ToLower() == "paid")
+                {
+                    _unitOfWork._orderHeaderRepository.UpdateStipePaymentId(orderHeaderId, session.Id, session.PaymentIntentId);
+                    _unitOfWork._orderHeaderRepository.UpdateStatus(orderHeaderId, orderHeader.OrderStatus, StaticUtilities.PaymentStatusApproved);
+                    _unitOfWork.Save();
+                }
+            }
+            
+            return View(orderHeaderId);
+        }
+
+
         [HttpPost]
         [Authorize(Roles =StaticUtilities.Role_Admin+","+StaticUtilities.Role_Employee)]
         public IActionResult UpdateOrderDetails()
@@ -119,7 +182,7 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             _unitOfWork._orderHeaderRepository.UpdateStatus(orderVM.orderHeader.Id, StaticUtilities.StatusInProcess);
             _unitOfWork.Save();
 
-            TempData["Success"] = "Order Shipped successfully";
+            TempData["Success"] = "Order Status updated successfully";
 
             return RedirectToAction(nameof(Details), new { orderId = orderVM.orderHeader.Id });
         }
@@ -129,10 +192,14 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
         [Authorize(Roles = StaticUtilities.Role_Admin + "," + StaticUtilities.Role_Employee)]
         public IActionResult ShipOrder()
         {
-            _unitOfWork._orderHeaderRepository.UpdateStatus(orderVM.orderHeader.Id, StaticUtilities.StatusShipped);
+			var orderFrmDb = _unitOfWork._orderHeaderRepository.Get(u => u.Id == orderVM.orderHeader.Id);
+            orderFrmDb.TrackingNumber = orderVM.orderHeader.TrackingNumber;
+            orderFrmDb.Carrier = orderVM.orderHeader.Carrier;
+            _unitOfWork._orderHeaderRepository.Update(orderFrmDb);
+			_unitOfWork._orderHeaderRepository.UpdateStatus(orderVM.orderHeader.Id, StaticUtilities.StatusShipped);
             _unitOfWork.Save();
 
-            TempData["Success"] = "Records updated successfully";
+            TempData["Success"] = "Order Shipped successfully";
 
             return RedirectToAction(nameof(Details), new { orderId = orderVM.orderHeader.Id });
         }
