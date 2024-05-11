@@ -50,11 +50,13 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
 
         public IActionResult MinusItem(int cartId)
         {
-            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.Id == cartId);
+            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.Id == cartId, tracked: true);
             if (cartFrmDb.Count <= 1)
             {
                 //remove Item
                 _unitOfWork._shoppingCartRepository.Remove(cartFrmDb);
+                HttpContext.Session.SetInt32(StaticUtilities.SessionCart,
+                   _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == cartFrmDb.ApplicationUserId).Count() - 1);
             }
             else
             {
@@ -68,8 +70,10 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
 
         public IActionResult RemoveItem(int cartId) 
         {
-            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.Id == cartId);
+            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.Id == cartId, tracked:true);
             _unitOfWork._shoppingCartRepository.Remove(cartFrmDb);
+            HttpContext.Session.SetInt32(StaticUtilities.SessionCart,
+                   _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == cartFrmDb.ApplicationUserId).Count()-1);
             _unitOfWork.Save();
             return RedirectToAction("Index");
         }
@@ -223,6 +227,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                     _unitOfWork._orderHeaderRepository.UpdateStatus(Id, StaticUtilities.StatusApproved, StaticUtilities.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
+                HttpContext.Session.Clear();
             }
             List<ShoppingCart> shoppingCarts = _unitOfWork._shoppingCartRepository.GetAll(u =>u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
             _unitOfWork._shoppingCartRepository.RemoveRange(shoppingCarts);

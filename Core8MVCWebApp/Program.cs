@@ -26,6 +26,23 @@ builder.Services.ConfigureApplicationCookie(options =>
 
 });
 
+
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options => {
+    options.IdleTimeout = TimeSpan.FromMinutes(100);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    //these can be retrived from facebook developer page after setting up the app access
+    options.AppId = "123456789asddads";
+    options.AppSecret="password";
+});
+
+
 builder.Services.AddRazorPages();
 //builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -51,6 +68,8 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseSession();
+
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",

@@ -8,7 +8,14 @@
     <div class="hard-header bg-secondary bg-gradient ml-0 py-4">
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="py-2 text-white">Register</h2>
+                @if (User.IsInRole(StaticUtilities.Role_Admin))
+                {
+                    <h2 class="py-2 text-white">ADMIN PORTAL - Register</h2>
+                }
+                else
+                {
+                    <h2 class="py-2 text-white">Register</h2>
+                }
             </div>
         </div>
     </div>
@@ -63,30 +70,33 @@
                         <label asp-for="Input.PhoneNumber">Phone Number</label>
                         <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
                     </div>
-                    <div class="form-floating mb-3 col-md-6" style="padding-left:6px">
-                        <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" placeholder="text">
-                            <option disabled selected>- Select User Role -</option>
-                        </select>
-                        @* <label asp-for="Input.Role">UserRole Selection</label> *@
-                        <span asp-validation-for="Input.Role" class="text-danger"></span>
-                    </div>                    
-                    <div class="form-floating mb-3 col-md-6" id="Input_CompanyId" style="padding-left:6px; display:none">
-                        <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select" placeholder="text">
-                            <option disabled selected>- Select Company -</option>
-                        </select>
-                        @* <label asp-for="Input.Role">UserRole Selection</label> *@
-                        <span asp-validation-for="Input.CompanyId" class="text-danger"></span>
-                    </div>
-
+                    @if (User.IsInRole(StaticUtilities.Role_Admin))
+                    {
+                        <div class="form-floating mb-3 col-md-6" style="padding-left:6px">
+                            <select asp-for="Input.Role" asp-items="@Model.Input.RoleList" class="form-select" placeholder="text">
+                                <option disabled selected>- Select User Role -</option>
+                            </select>
+                            @* <label asp-for="Input.Role">UserRole Selection</label> *@
+                            <span asp-validation-for="Input.Role" class="text-danger"></span>
+                        </div>                    
+                        <div class="form-floating mb-3 col-md-6" id="Input_CompanyId" style="padding-left:6px; display:none">
+                            <select asp-for="Input.CompanyId" asp-items="@Model.Input.CompanyList" class="form-select" placeholder="text">
+                                <option disabled selected>- Select Company -</option>
+                            </select>
+                            @* <label asp-for="Input.Role">UserRole Selection</label> *@
+                            <span asp-validation-for="Input.CompanyId" class="text-danger"></span>
+                        </div>
+                    }
                     <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
                 </form>
             </div>
         </div>
     </div>
-    <div class="col-md-12">
+    @if (!User.IsInRole(StaticUtilities.Role_Admin))
+    {
+        <div class="col-md-12 p-3 text-center">
         <section>
             <p class="divider-text d-flex pt-3">or</p>
-            <h3>Use another service to register.</h3>
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
@@ -115,6 +125,7 @@
             }
         </section>
     </div>
+    }
 </div>
 
 @section Scripts {
