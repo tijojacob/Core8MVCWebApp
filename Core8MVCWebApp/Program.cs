@@ -35,6 +35,13 @@ builder.Services.AddSession(options => {
 });
 
 
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    //these can be retrived from facebook developer page after setting up the app access
+    options.AppId = "123456789asddads";
+    options.AppSecret="password";
+});
+
 
 builder.Services.AddRazorPages();
 //builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
