@@ -1,5 +1,6 @@
 using Core8MVC.DataAccess.Repository.IRepository;
 using Core8MVC.Models.Models;
+using Core8MVC.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -21,6 +22,19 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
         public IActionResult Index()
         {
             List<Product> objProductList = _unitOfWork._productRepository.GetAll(includeProperties: "Category").ToList();
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if(userId!=null)
+            {
+                HttpContext.Session.SetInt32(StaticUtilities.SessionCart,
+                    _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == userId.Value).Count());
+            }
+            else
+            {
+                HttpContext.Session.SetInt32(StaticUtilities.SessionCart, 0);
+            }
+            
+
             return View(objProductList);
         }
 
@@ -57,8 +71,11 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
             {
                 cart.ApplicationUserId = userId;
                 _unitOfWork._shoppingCartRepository.Add(cart);
+                
             }        
             _unitOfWork.Save();
+            HttpContext.Session.SetInt32(StaticUtilities.SessionCart,
+                    _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == userId).Count());
 
             cart.Product = _unitOfWork._productRepository.Get(u => u.Id == cart.ProductId, includeProperties: "Category");
 
