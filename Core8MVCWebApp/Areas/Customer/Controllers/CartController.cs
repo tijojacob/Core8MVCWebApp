@@ -4,6 +4,7 @@ using Core8MVC.Models.Models;
 using Core8MVC.Models.ViewModels;
 using Core8MVC.Utility;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using System.Security.Claims;
@@ -16,10 +17,12 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IEmailSender _emailSender;
         public ShoppingCartVM ShoppingCartVM { get; set; }
-        public CartController(IUnitOfWork unitOfWork)
+        public CartController(IUnitOfWork unitOfWork, IEmailSender emailSender)
         {
             _unitOfWork = unitOfWork;
+            _emailSender = emailSender;
         }
         public IActionResult Index()
         {
@@ -227,8 +230,12 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                     _unitOfWork._orderHeaderRepository.UpdateStatus(Id, StaticUtilities.StatusApproved, StaticUtilities.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
-                HttpContext.Session.Clear();
+                HttpContext.Session.Clear();                
             }
+
+            _emailSender.SendEmailAsync(orderHeader.ApplicationUser.Email, "New Order Confirmation",
+                $"<p> New Order Created - {orderHeader.Id}</p>");
+
             List<ShoppingCart> shoppingCarts = _unitOfWork._shoppingCartRepository.GetAll(u =>u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
             _unitOfWork._shoppingCartRepository.RemoveRange(shoppingCarts);
 			_unitOfWork.Save();

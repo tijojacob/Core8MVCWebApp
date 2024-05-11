@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Core8MVC.Utility;
 using Stripe;
+using Core8MVC.DataAccess.DbInitialiser;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,6 +48,7 @@ builder.Services.AddRazorPages();
 //builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddScoped<IDBInitialiser, DbInitialiser>();
 
 
 var app = builder.Build();
@@ -70,6 +72,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
 
+SeedData();
+
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
@@ -86,3 +90,12 @@ app.MapAreaControllerRoute(
     pattern: "Customer/{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+void SeedData()
+{
+    using(var scope = app.Services.CreateScope())
+    {
+        var dbInitialiser = scope.ServiceProvider.GetRequiredService<IDBInitialiser>();
+        dbInitialiser.Initialise();
+    }
+}

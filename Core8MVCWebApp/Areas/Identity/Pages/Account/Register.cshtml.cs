@@ -126,15 +126,7 @@ namespace Core8MVCWebApp.Areas.Identity.Pages.Account
 
 
         public async Task OnGetAsync(string returnUrl = null)
-        {
-            if(!_roleManager.RoleExistsAsync(StaticUtilities.Role_Customer).GetAwaiter().GetResult())
-            {
-                _roleManager.CreateAsync(new IdentityRole(StaticUtilities.Role_Customer)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticUtilities.Role_Admin)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticUtilities.Role_Company)).GetAwaiter().GetResult();
-                _roleManager.CreateAsync(new IdentityRole(StaticUtilities.Role_Employee)).GetAwaiter().GetResult();
-            }
-
+        {            
             Input = new()
             {
                 RoleList = _roleManager.Roles.Select(x => new { x.Name, x.Id }).Select(u => new SelectListItem
