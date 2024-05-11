@@ -31,7 +31,6 @@ namespace Core8MVCWebApp.ViewComponents
                 HttpContext.Session.Clear();
                 return View(0);
             }
-
         }
     }
 }
