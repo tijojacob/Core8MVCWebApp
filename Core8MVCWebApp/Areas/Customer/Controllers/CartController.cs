@@ -227,6 +227,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                     _unitOfWork._orderHeaderRepository.UpdateStatus(Id, StaticUtilities.StatusApproved, StaticUtilities.PaymentStatusApproved);
                     _unitOfWork.Save();
                 }
+                HttpContext.Session.Clear();
             }
             List<ShoppingCart> shoppingCarts = _unitOfWork._shoppingCartRepository.GetAll(u =>u.ApplicationUserId == orderHeader.ApplicationUserId).ToList();
             _unitOfWork._shoppingCartRepository.RemoveRange(shoppingCarts);
