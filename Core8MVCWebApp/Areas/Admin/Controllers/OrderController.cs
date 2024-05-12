@@ -83,7 +83,7 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             orderVM.orderHeader = _unitOfWork._orderHeaderRepository.Get(u => u.Id == orderVM.orderHeader.Id, includeProperties: "ApplicationUser");
             orderVM.orderDetails = _unitOfWork._orderDetailRepository.GetAll(u => u.OrderHeaderId == orderVM.orderHeader.Id, includeProperties: "Product");
 
-            var domain = "https://localhost:7276/";//System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";//System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
 
             var options = new Stripe.Checkout.SessionCreateOptions
             {

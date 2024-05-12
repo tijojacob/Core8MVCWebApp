@@ -162,7 +162,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
             if (user.CompanyId.GetValueOrDefault(0) == 0)
             {
                 //its a regular cust account and Stripe Logic
-                var domain = "https://localhost:7276/";//System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
+                var domain = Request.Scheme+"://"+ Request.Host.Value +"/";//System.Net.NetworkInformation.IPGlobalProperties.GetIPGlobalProperties().DomainName;
 
                 var options = new Stripe.Checkout.SessionCreateOptions
                 {
