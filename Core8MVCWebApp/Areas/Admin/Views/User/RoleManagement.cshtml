@@ -1,0 +1,71 @@
+﻿@model Core8MVC.Models.ViewModels.RoleManagementVM
+
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h2 class="text-white py-2">Manage User Role</h2>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form method="post" class="row">
+            <div class="border p-3 mt-4">
+                <input asp-for="ApplicationUser.Id" hidden class="form-control" />
+                <div asp-validation-summary="All" class="text-danger">
+                </div>
+                <div>
+                    <label asp-for="ApplicationUser.Name" class="p-0"></label>
+                    <input asp-for="ApplicationUser.Name" readonly class="form-control" />
+                </div>
+                <div style="margin-top: 10px;margin-bottom: 10px;">
+                    <label asp-for="ApplicationUser.Role" class="p-0"></label>
+                    <select asp-for="ApplicationUser.Role" asp-items="@Model.RoleList" class="form-select border"></select>
+                    <span asp-validation-for="ApplicationUser.Role" class="text-danger"></span>
+                </div>
+
+                @{
+                    var companyVisible = "display:none";
+                    if(Model.ApplicationUser.Role == StaticUtilities.Role_Company)
+                    {
+                        companyVisible = "display:block";
+                    }
+                }
+
+                <div style="margin-top: 10px;margin-bottom: 10px;@companyVisible" id="companySelector">
+                    <label asp-for="ApplicationUser.CompanyId" class="p-0"></label>
+                    <select asp-for="ApplicationUser.CompanyId" asp-items="@Model.CompanyList" class="form-select border"></select>
+                    <span asp-validation-for="ApplicationUser.CompanyId" class="text-danger"></span>
+                </div>
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        <button asp-controller="User" asp-action="CreateCategory" type="submit" class="btn btn-primary  form-control">Update</button>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a asp-controller="User" asp-action="Index" class="btn btn-secondary border form-control">Back to List</a>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('#ApplicationUser_Role').change(function () {
+                var selection = $('#ApplicationUser_Role Option:Selected').text();
+                if (selection == 'Company') {
+                    $('#companySelector').show();
+                }
+                else {
+                    $('#companySelector').hide();
+                }
+            })
+        })
+    </script>
+}
