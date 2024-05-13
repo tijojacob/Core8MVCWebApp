@@ -9,7 +9,7 @@ namespace Core8MVC.DataAccess.Repository.IRepository
 {
     public interface IApplicationUserRepository : IRepository<ApplicationUser>
     {
-        //void Update(ApplicationUser applicationUser);
+        void Update(ApplicationUser applicationUser);
         //void Save();
     }
 }

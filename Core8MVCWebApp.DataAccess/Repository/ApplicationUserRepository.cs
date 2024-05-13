@@ -22,9 +22,9 @@ namespace Core8MVC.DataAccess.Repository
         //    _db.SaveChanges();
         //}
 
-        //public void Update(ApplicationUser applicationUser)
-        //{
-        //    _db.Categories.Update(ApplicationUser);
-        //}
+        public void Update(ApplicationUser applicationUser)
+        {
+            _db.ApplicationUsers.Update(applicationUser);
+        }
     }
 }
