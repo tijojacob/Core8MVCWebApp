@@ -212,11 +212,18 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             }
 
             string wwwRoot = _webHostEnvironment.WebRootPath;
-            //var oldImagePath = Path.Combine(wwwRoot, productDelete.ImageURL.TrimStart('\\'));
-            //if (System.IO.File.Exists(oldImagePath))
-            //{
-            //    System.IO.File.Delete(oldImagePath);
-            //}
+            string productPath = @"images\product\product-" + productDelete.Id.ToString();
+            string filePath = Path.Combine(wwwRoot, productPath);
+
+            if (Directory.Exists(filePath))
+            {
+                string[] filePaths = Directory.GetFiles(filePath);
+                foreach (string filepath in filePaths)
+                {
+                    System.IO.File.Delete(filepath);
+                }
+                Directory.Delete(filePath);
+            }            
 
             _unitOfWork._productRepository.Remove(productDelete);
             TempData["success"] = "Record deleted successfully";
