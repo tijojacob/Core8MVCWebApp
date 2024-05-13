@@ -43,6 +43,13 @@ builder.Services.AddAuthentication().AddFacebook(options =>
     options.AppSecret="password";
 });
 
+builder.Services.AddAuthentication().AddMicrosoftAccount(options =>
+{
+    //these can be retrived from azure portal page after setting up the app registration & Client Secret
+    options.ClientId = "123456789asddads";
+    options.ClientSecret = "password"; // 
+});
+
 
 builder.Services.AddRazorPages();
 //builder.Services.AddScoped<ICategoryRepository,CategoryRepository>();
