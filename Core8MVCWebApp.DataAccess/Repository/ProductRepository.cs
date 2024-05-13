@@ -35,6 +35,7 @@ namespace Core8MVC.DataAccess.Repository
                 //{
                 //    dbObject.ImageURL = product.ImageURL;
                 //}
+                dbObject.ProductImages=product.ProductImages;
             }
         }
     }
