@@ -13,6 +13,7 @@ namespace Core8MVC.DataAccess.Repository
     {
         public ICategoryRepository _categoryRepository { get; private set; }
         public IProductRepository _productRepository { get; private set; }
+        public IProductImageRepository _productImageRepository { get; private set; }
         public ICompanyRepository _companyRepository { get; private set; }
         public IShoppingCartRepository _shoppingCartRepository { get; private set; }
         public IApplicationUserRepository _applicationUserRepository { get; private set; }
@@ -30,6 +31,7 @@ namespace Core8MVC.DataAccess.Repository
             _applicationUserRepository = new ApplicationUserRepository(_db);
             _orderHeaderRepository = new OrderHeaderRepository(_db);
             _orderDetailRepository = new OrderDetailRepository(_db);
+            _productImageRepository = new ProductImageRepository(_db);
         }
         public void Save()
         {
