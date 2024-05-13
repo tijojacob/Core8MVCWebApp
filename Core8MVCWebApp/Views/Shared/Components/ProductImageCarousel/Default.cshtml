@@ -1,0 +1,52 @@
+﻿@model Product
+
+
+@if (Model.ProductImages.Count() > 0)
+{
+    <div id="carouselExampleIndicators_@Model.Id" class="carousel slide">
+       @*  <div class="carousel-indicators">
+
+            @foreach(var imageWithIndex in Model.Select((image,index)=>new{ProductImage=image, Index=index}))
+            {
+                <button type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide-to="@imageWithIndex.Index" class="@(imageWithIndex.Index==0?"active" : "")" aria-current="true" aria-label="Slide @imageWithIndex.Index"></button>
+            }                        
+        </div> *@
+        <div class="carousel-inner">
+            @foreach (var imageWithIndex in Model.ProductImages.Select((image, index) => new { ProductImage = image, Index = index }))
+            {
+                <div class="@(imageWithIndex.Index==0? "carousel-item active" : "carousel-item")">
+                    <img src="@Url.Content(@imageWithIndex.ProductImage.ImageURL)" class="d-block w-100" alt="...">
+                </div>
+            }                       
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+}
+else
+{
+    <div id="carouselExampleIndicators_@Model.Id" class="carousel slide">
+       @*  <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 0"></button>
+        </div> *@
+        <div class="carousel-inner">
+        </div>
+        <div class="carousel-item active">
+            <img src="https://placehold.co/500x600/png" class="d-block w-100" alt="..." >
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators_@Model.Id" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+}

@@ -35,11 +35,11 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                 OrderHeader = new()
             };
 
-            IEnumerable<ProductImage> productImages = _unitOfWork._productImageRepository.GetAll();
+            //IEnumerable<ProductImage> productImages = _unitOfWork._productImageRepository.GetAll();
 
             foreach(var cart in ShoppingCartVM.ShoppingCartList)
             {
-                cart.Product.ProductImages = productImages.Where(u => u.ProductID == cart.Product.Id).ToList();
+                //cart.Product.ProductImages = productImages.Where(u => u.ProductID == cart.Product.Id).ToList();
                 cart.ItemPrice = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.ItemPrice * cart.Count);
             }
