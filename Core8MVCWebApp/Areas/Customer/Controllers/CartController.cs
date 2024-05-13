@@ -34,8 +34,12 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
                 ShoppingCartList = _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == userId, includeProperties: "Product"),
                 OrderHeader = new()
             };
+
+            IEnumerable<ProductImage> productImages = _unitOfWork._productImageRepository.GetAll();
+
             foreach(var cart in ShoppingCartVM.ShoppingCartList)
             {
+                cart.Product.ProductImages = productImages.Where(u => u.ProductID == cart.Product.Id).ToList();
                 cart.ItemPrice = GetPriceBasedOnQuantity(cart);
                 ShoppingCartVM.OrderHeader.OrderTotal += (cart.ItemPrice * cart.Count);
             }

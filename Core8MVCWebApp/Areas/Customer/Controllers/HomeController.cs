@@ -21,7 +21,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
 
         public IActionResult Index()
         {
-            List<Product> objProductList = _unitOfWork._productRepository.GetAll(includeProperties: "Category").ToList();
+            List<Product> objProductList = _unitOfWork._productRepository.GetAll(includeProperties: "Category,ProductImages").ToList();
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if(userId!=null)
@@ -46,7 +46,7 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
             ShoppingCart objCart = new()
             {
                 Id = cartFrmDb != null ? cartFrmDb.Id : 0,
-                Product = _unitOfWork._productRepository.Get(u => u.Id == productId, includeProperties: "Category"),
+                Product = _unitOfWork._productRepository.Get(u => u.Id == productId, includeProperties: "Category,ProductImages"),
                 Count = 1,
                 ProductId = productId,
                 ApplicationUserId = userId
