@@ -12,7 +12,7 @@
         <form method="post" class="row" enctype="multipart/form-data">                                                    
             <div class="border p-3 mt-4">
                 <input asp-for="Product.Id" class="form-control" hidden/>
-                <input asp-for="Product.ImageURL" class="form-control" hidden />
+                @* <input asp-for="Product.ImageURL" class="form-control" hidden /> *@
                 <div asp-validation-summary="All" class="text-danger">
                 </div>
                 <div style="margin-top: 10px;margin-bottom: 10px;">
@@ -84,20 +84,20 @@
                     <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
                 </div>
 
-                <div style="margin-top: 10px;margin-bottom: 10px;">
+                @* <div style="margin-top: 10px;margin-bottom: 10px;">
                     <label asp-for="Product.ImageURL" class="p-0">
                     </label>
                     <input type="file" name="file" class="form-control" />
                     <span asp-validation-for="Product.ImageURL" class="text-danger"></span>
-                </div>
-                @{
+                </div> *@
+               @*  @{
                     if (!string.IsNullOrEmpty(Model.Product.ImageURL))
                     {
                         <div style="margin-top: 10px;margin-bottom: 10px; max-width:500px">
                             <img src="@Url.Content("~/"+@Model.Product.ImageURL)" style="border-radius:5px; border: 1px solid" />
                         </div>
                     }
-                }                
+                } *@                
                 <div class="row">
                     <div class="col-6 col-md-3">
                         @{

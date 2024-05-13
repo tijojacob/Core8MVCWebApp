@@ -55,28 +55,28 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
 
                 if (file!=null)
                 {
-                    if(!string.IsNullOrEmpty(obj.Product.ImageURL))
-                    {
-                        var oldImagePath = Path.Combine(wwwRoot, obj.Product.ImageURL.TrimStart('\\'));
-                        if (System.IO.File.Exists(oldImagePath))
-                        {
-                            System.IO.File.Delete(oldImagePath);                            
-                        }
-                        obj.Product.ImageURL = string.Empty;
-                    }
+                    //if(!string.IsNullOrEmpty(obj.Product.ImageURL))
+                    //{
+                    //    var oldImagePath = Path.Combine(wwwRoot, obj.Product.ImageURL.TrimStart('\\'));
+                    //    if (System.IO.File.Exists(oldImagePath))
+                    //    {
+                    //        System.IO.File.Delete(oldImagePath);                            
+                    //    }
+                    //    obj.Product.ImageURL = string.Empty;
+                    //}
 
-                    if(string.IsNullOrEmpty(obj.Product.ImageURL))
-                    {
-                        string fileName = Guid.NewGuid().ToString() + Path.GetFileNameWithoutExtension(file.FileName) + Path.GetExtension(file.FileName);
-                        string filePath = Path.Combine(wwwRoot, @"images\product");
+                    //if(string.IsNullOrEmpty(obj.Product.ImageURL))
+                    //{
+                    //    string fileName = Guid.NewGuid().ToString() + Path.GetFileNameWithoutExtension(file.FileName) + Path.GetExtension(file.FileName);
+                    //    string filePath = Path.Combine(wwwRoot, @"images\product");
 
-                        using (var fileStream = new FileStream(Path.Combine(filePath, fileName), FileMode.Create))
-                        {
-                            file.CopyTo(fileStream);
-                        }
-                        obj.Product.ImageURL = @"images\product\" + fileName;
+                    //    using (var fileStream = new FileStream(Path.Combine(filePath, fileName), FileMode.Create))
+                    //    {
+                    //        file.CopyTo(fileStream);
+                    //    }
+                    //    obj.Product.ImageURL = @"images\product\" + fileName;
 
-                    }                                        
+                    //}                                        
                 }
 
                 if(obj.Product.Id==0)
@@ -168,11 +168,11 @@ namespace Core8MVCWebApp.Areas.Admin.Controllers
             }
 
             string wwwRoot = _webHostEnvironment.WebRootPath;
-            var oldImagePath = Path.Combine(wwwRoot, productDelete.ImageURL.TrimStart('\\'));
-            if (System.IO.File.Exists(oldImagePath))
-            {
-                System.IO.File.Delete(oldImagePath);
-            }
+            //var oldImagePath = Path.Combine(wwwRoot, productDelete.ImageURL.TrimStart('\\'));
+            //if (System.IO.File.Exists(oldImagePath))
+            //{
+            //    System.IO.File.Delete(oldImagePath);
+            //}
 
             _unitOfWork._productRepository.Remove(productDelete);
             TempData["success"] = "Record deleted successfully";
