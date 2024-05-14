@@ -31,10 +31,11 @@ namespace Core8MVC.DataAccess.Repository
                 dbObject.Price50 = product.Price50;
                 dbObject.Price100 = product.Price100;
                 dbObject.CategoryId = product.CategoryId;
-                if (product.ImageURL != null)
-                {
-                    dbObject.ImageURL = product.ImageURL;
-                }
+                //if (product.ImageURL != null)
+                //{
+                //    dbObject.ImageURL = product.ImageURL;
+                //}
+                dbObject.ProductImages=product.ProductImages;
             }
         }
     }

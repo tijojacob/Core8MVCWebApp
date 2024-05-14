@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Core8MVC.DataAccess.Repository.IRepository
 {
-    public interface IApplicationUserRepository : IRepository<ApplicationUser>
+    public interface IProductImageRepository : IRepository<ProductImage>
     {
-        void Update(ApplicationUser applicationUser);
+        void Update(ProductImage productImage);
         //void Save();
     }
 }

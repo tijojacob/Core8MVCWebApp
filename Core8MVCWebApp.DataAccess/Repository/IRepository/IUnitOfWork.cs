@@ -9,7 +9,8 @@ namespace Core8MVC.DataAccess.Repository.IRepository
     public interface IUnitOfWork
     {
         ICategoryRepository _categoryRepository { get; }
-        IProductRepository _productRepository { get; } 
+        IProductRepository _productRepository { get; }
+        IProductImageRepository _productImageRepository { get; }
         ICompanyRepository _companyRepository { get; }
         IShoppingCartRepository _shoppingCartRepository { get; }
         IApplicationUserRepository _applicationUserRepository { get; }
