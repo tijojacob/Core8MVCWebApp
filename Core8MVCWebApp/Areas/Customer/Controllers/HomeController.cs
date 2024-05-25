@@ -41,15 +41,19 @@ namespace Core8MVCWebApp.Areas.Customer.Controllers
         public IActionResult Details(int productId)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-            ShoppingCart cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.ProductId == productId && u.ApplicationUserId == userId);
+            ShoppingCart cartFrmDb = new ShoppingCart();
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (userId != null)
+            {
+                cartFrmDb = _unitOfWork._shoppingCartRepository.Get(u => u.ProductId == productId && u.ApplicationUserId == userId.Value);
+            }
             ShoppingCart objCart = new()
             {
                 Id = cartFrmDb != null ? cartFrmDb.Id : 0,
                 Product = _unitOfWork._productRepository.Get(u => u.Id == productId, includeProperties: "Category"),
-                Count = 1,
+                Count = userId != null ? _unitOfWork._shoppingCartRepository.GetAll(u => u.ApplicationUserId == userId.Value).Count() : 0,
                 ProductId = productId,
-                ApplicationUserId = userId
+                ApplicationUserId = userId!=null ? userId.Value : "0"
             };
             return View(objCart);
         }
